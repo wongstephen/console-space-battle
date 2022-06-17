@@ -1,50 +1,92 @@
+console.log("START");
+
+//myShip-schwarzenegger
 const schwarzenegger = () => {
   return {
     id: "schwarzenegger",
     hull: 20,
     firepower: 5,
     accuracy: 0.7,
-    hit(num) {
-      return this.hull - +num;
-    },
   };
 };
 
+//Each instance of alien ship
 const alienShips = (id) => {
   return {
-    id,
-    hull: Math.ceil(Math.random() * 3 + 2),
+    id: "Alien Ship " + id,
+    hull: Math.ceil(Math.random() * 3 + 3),
     firepower: Math.ceil(Math.random() * 3 + 1),
     accuracy: Math.ceil(Math.random() * 3 + 5) / 10,
-    attack(num) {
-      return (this.hull -= num);
-    },
   };
 };
 
-const alienShip1 = alienShips(1);
-const alienShip2 = alienShips(2);
-const alienShip3 = alienShips(3);
-const alienShip4 = alienShips(4);
-const alienShip5 = alienShips(5);
-const alienShip6 = alienShips(6);
-const myShip = schwarzenegger();
+let roundCount = 1;
 
-console.log(alienShip1);
-console.log(alienShip2);
-console.log(alienShip3);
-console.log(alienShip4);
-console.log(alienShip5);
-console.log(alienShip6);
-
-//myShip attack Alien1
-if (Math.random() < myShip.accuracy) {
-  alienShip1.attack(myShip.firepower);
-  if (alienShip1.hull <= 0) {
-    console.log("Alien Ship Destroyed!");
+const rounds = (round) => {
+  const myShip = schwarzenegger();
+  const alienShip = alienShips(round);
+  const level = "Round " + round;
+  if (round == 7) {
+    return console.log("You Won"); //exit
   }
-  console.log(alienShip1.hull);
-} else {
-  console.log("missed");
-  console.log(alienShip1.hull);
-}
+
+  do {
+    // console.log(alienShip);
+    // console.log(myShip);
+    const myShipAttackAlien = () => {
+      if (myShip.accuracy > Math.random()) {
+        alienShip.hull -= myShip.firepower;
+        console.log(
+          `You attacked and hit ${alienShip.id}. You did ${myShip.firepower} damage.`
+        );
+        console.log(
+          `Alien hull left: ${alienShip.hull} and your hull left: ${myShip.hull}`
+        );
+      } else {
+        console.log(`${myShip.id} missed!`);
+        console.log(
+          `Alien hull left: ${alienShip.hull} and your hull left: ${myShip.hull}`
+        );
+      }
+    };
+    const alienAttackMyShip = () => {
+      const random = Math.random();
+      if (alienShip.accuracy > random) {
+        myShip.hull -= alienShip.firepower;
+        console.log(
+          `Alien Ship ${round} attacked and hit ${myShip.id}! Alien ship did ${alienShip.firepower} damage`
+        );
+        console.log(
+          `Alien hull left: ${alienShip.hull} and your hull left: ${myShip.hull}`
+        );
+      } else {
+        console.log(`The Alien Ship ${round} missed!`);
+        console.log(
+          `Alien hull left: ${alienShip.hull} and your hull left: ${myShip.hull}`
+        );
+      }
+    };
+    myShipAttackAlien();
+    if (alienShip.hull > 0) {
+      alienAttackMyShip();
+    }
+    if (myShip.hull <= 0) {
+      return console.log(`${myShip.id} was destroyed!`);
+    }
+  } while (alienShip.hull > 0);
+  console.log(`Alien Ship ${round} was destroyed!`);
+  const pVal = prompt(
+    `Do you want to continue enter (c) or retreat enter (r)?`
+  );
+  if (pVal == "r") {
+    return console.log("game over");
+  } else {
+    round++;
+    console.log("Next Round");
+    console.log(`rrRound ${round}`);
+
+    rounds(round);
+  }
+};
+
+rounds(roundCount);

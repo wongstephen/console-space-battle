@@ -3,7 +3,7 @@ console.log("START");
 //myShip-schwarzenegger
 const schwarzenegger = () => {
   return {
-    id: "schwarzenegger",
+    id: "USS Schwarzenegger",
     hull: 20,
     firepower: 5,
     accuracy: 0.7,
@@ -36,12 +36,8 @@ const rounds = (round) => {
     const myShipAttackAlien = () => {
       if (myShip.accuracy > Math.random()) {
         alienShip.hull -= myShip.firepower;
-        console.log(
-          `You attacked and hit ${alienShip.id}. You did ${myShip.firepower} damage.`
-        );
-        console.log(
-          `Alien hull left: ${alienShip.hull} and your hull left: ${myShip.hull}`
-        );
+        let msg = `You attacked and hit ${alienShip.id}. You did ${myShip.firepower} damage. Alien hull left: ${alienShip.hull} and your hull left: ${myShip.hull}`;
+        console.log(msg);
       } else {
         console.log(`${myShip.id} missed!`);
         console.log(
@@ -78,15 +74,13 @@ const rounds = (round) => {
   const pVal = prompt(
     `Do you want to continue enter (c) or retreat enter (r)?`
   );
-  if (pVal == "r") {
+  if (pVal.toLowerCase == "r" || pVal == "retreat") {
     return console.log("game over");
   } else {
     round++;
-    console.log("Next Round");
-    console.log(`rrRound ${round}`);
-
     rounds(round);
   }
 };
 
+alert("Welcome, pless ok to start");
 rounds(roundCount);

@@ -6,13 +6,16 @@ body {
   justify-content: center;
   width: 100vw;
 }
-h1 {
+h1, h2{
   color: rgb(0, 255, 0);
   font-family: 'Courier New', Courier, monospace;
   font-size: 5rem;
   font-weight: 400;
-  letter-spacing: .5rem;
+  letter-spacing: .25rem;
   text-align: center;
+}
+h2 {
+  font-size: 1rem;
 }
 p {
   color: rgb(0, 255, 0);
@@ -21,4 +24,5 @@ p {
   font-weight: 100;
   letter-spacing: .1rem;
   text-align: center;
+
 }

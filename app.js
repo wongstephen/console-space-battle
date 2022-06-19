@@ -12,36 +12,27 @@ class Schwarzenegger {
     this.accuracy = 0.7;
   }
 }
-/* const alienShips = (id) => {
-  return {
-    id: "Alien Ship " + id,
-    hull: Math.ceil(Math.random() * 3 + 3),
-    // firepower: Math.ceil(Math.random() * 3 + 1),
-    firepower: Math.ceil(Math.random() * 3 + 4), //Alien ship is a little buffed
-    accuracy: Math.ceil(Math.random() * 3 + 5) / 10,
-  };
-}; */
+
 class AlienShips {
   constructor(round) {
     this.id = "Alien Ship " + round;
     this.hull = Math.floor(Math.random() * 4) + 3;
-    // this.firepower = Math.floor(Math.random() * 3) + 2;
-    this.firepower = Math.floor(Math.random() * 3) + 6;
+    this.firepower = Math.floor(Math.random() * 3) + 2;
+    // this.firepower = Math.floor(Math.random() * 3) + 6; //firepower buffed a little bit
     this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
   }
 }
 
 const myShip = new Schwarzenegger("Schwarzenegger");
 let roundCount = 1;
+const randomRounds = Math.floor(Math.random() * 4) + 6;
+console.log("Total rounds: " + randomRounds);
 
 const rounds = (round) => {
-  // const myShip = schwarzenegger(); //Factory function
-  // const alienShip = alienShips(round); //Factory function
   const alienShip = new AlienShips(round); //Instance of Alien Ship Per Round
   console.log("%cRound " + round + "!", "background: #222; color: #bada55;");
   do {
-    // console.log(alienShip);
-    // console.log(myShip);
+    //USS ATTACK ALIEN
     const myShipAttackAlien = () => {
       if (myShip.accuracy > Math.random()) {
         alienShip.hull -= myShip.firepower;
@@ -61,15 +52,16 @@ const rounds = (round) => {
         );
       }
     };
+
+    //ALIEN ATTACK USS
     const alienAttackMyShip = () => {
-      const random = Math.random();
-      if (alienShip.accuracy > random) {
+      if (alienShip.accuracy > Math.random()) {
         myShip.hull -= alienShip.firepower;
         if (myShip.hull < 0) {
           myShip.hull = 0;
         }
         console.log(
-          `${alienShip.id} ${round} attacked and hit ${myShip.id}! Alien ship did ${alienShip.firepower} damage`
+          `${alienShip.id} attacked and hit ${myShip.id}! Alien ship did ${alienShip.firepower} damage`
         );
         console.log(
           `${alienShip.id} hull left: ${alienShip.hull} and ${myShip.id} hull left: ${myShip.hull}`
@@ -81,6 +73,8 @@ const rounds = (round) => {
         );
       }
     };
+
+    //END OF TURN CHECK HULL CONDITIONS
     myShipAttackAlien();
     if (alienShip.hull > 0) {
       alienAttackMyShip();
@@ -91,30 +85,32 @@ const rounds = (round) => {
         "background: #222; color: #ff0000"
       );
     }
+    //REPEAT ROUND IF ALIEN SHIP OR MYSHIP HAS HIT POINTS
   } while (alienShip.hull > 0);
   console.log(
     `%c${alienShip.id} was destroyed!`,
     "background: #222; color: #00000ff"
   );
-  if (round == 6) {
+
+  //END GAME CONDITION
+  if (round == randomRounds) {
     return console.log(
-      "%cCongrats, WINNER!",
+      "%cCongrats, YOU WON!",
       "background: #222; color: #00ff00"
-    ); //exit
+    );
   }
 
   //CONTINE OR RETREAT
-  const pVal = prompt(
-    `Do you want to continue enter (c) or retreat enter (r)?`
+  const promptVal = prompt(
+    `Do you want to continue enter (c) or any key to retreat?`
   );
-  if (pVal == "c" || pVal == "C") {
+  if (promptVal.toLowerCase() == "c") {
     round++;
     rounds(round);
   } else {
-    return console.log("%cGame over!", "background: #222; color: #ff0000");
+    console.log("%cGame over!", "background: #222; color: #ff0000");
   }
 };
-
 setTimeout(function () {
   alert("Welcome, pless ok to start");
   rounds(roundCount);

@@ -2,37 +2,29 @@ console.log(
   "%cSpace Battle Mini Project Start",
   "background: #222; color: #00ff00"
 );
-
-//SHIP CLASS
-class Schwarzenegger {
-  constructor(id) {
-    this.id = "USS " + id;
-    this.hull = 20;
-    this.firepower = 5;
-    this.accuracy = 0.7;
+//SHIP CLASS CONSTRUCTOR
+class Ship {
+  constructor(id, hull, firepower, accuracy) {
+    this.id = id;
+    this.hull = hull;
+    this.firepower = firepower;
+    this.accuracy = accuracy;
   }
 }
-
-class AlienShips {
-  constructor(round) {
-    this.id = "Alien Ship " + round;
-    this.hull = Math.floor(Math.random() * 4) + 3;
-    this.firepower = Math.floor(Math.random() * 3) + 2;
-    // this.firepower = Math.floor(Math.random() * 3) + 6; //firepower buffed a little bit
-    this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
-  }
-}
-
-const myShip = new Schwarzenegger("Schwarzenegger");
-let roundCount = 1;
+const myShip = new Ship("USS Schwarzenegger", 20, 5, 0.7); //PLAYER SHIP INSTANCE
 const randomRounds = Math.floor(Math.random() * 4) + 6;
 console.log("Total rounds: " + randomRounds);
-
+let roundCount = 1;
+//GAME IS PLAYED IN RANDOM NUMBER OF ROUNDS
 const rounds = (round) => {
-  const alienShip = new AlienShips(round); //Instance of Alien Ship Per Round
+  const id = "Alien Ship " + round;
+  const hull = Math.floor(Math.random() * 4) + 3;
+  const firepower = Math.floor(Math.random() * 3) + 2;
+  const accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
+  const alienShip = new Ship(id, hull, firepower, accuracy); //NEW ALIENSHIP INSTANCE PER ROUND
   console.log("%cRound " + round + "!", "background: #222; color: #bada55;");
   do {
-    //USS ATTACK ALIEN
+    //PLAYER ATTACK ALIEN FUNCTION. LOOPS TURN WITHIN ROUND.
     const myShipAttackAlien = () => {
       if (myShip.accuracy > Math.random()) {
         alienShip.hull -= myShip.firepower;
@@ -40,7 +32,7 @@ const rounds = (round) => {
           alienShip.hull = 0;
         }
         console.log(
-          `${myShip.id} attacked and hit ${alienShip.id}. You did ${myShip.firepower} damage.`
+          `${myShip.id} attacked ${alienShip.id} and did ${myShip.firepower} damage.`
         );
         console.log(
           `${alienShip.id} hull left: ${alienShip.hull} and ${myShip.id} hull left: ${myShip.hull}`
@@ -52,8 +44,7 @@ const rounds = (round) => {
         );
       }
     };
-
-    //ALIEN ATTACK USS
+    //ALIEN ATTACK PAYER. LOOPS TURN WITHIN ROUND.
     const alienAttackMyShip = () => {
       if (alienShip.accuracy > Math.random()) {
         myShip.hull -= alienShip.firepower;
@@ -61,7 +52,7 @@ const rounds = (round) => {
           myShip.hull = 0;
         }
         console.log(
-          `${alienShip.id} attacked and hit ${myShip.id}! Alien ship did ${alienShip.firepower} damage`
+          `${alienShip.id} attacked ${myShip.id} and did ${alienShip.firepower} damage`
         );
         console.log(
           `${alienShip.id} hull left: ${alienShip.hull} and ${myShip.id} hull left: ${myShip.hull}`
@@ -73,8 +64,7 @@ const rounds = (round) => {
         );
       }
     };
-
-    //END OF TURN CHECK HULL CONDITIONS
+    //INVOKING ON FUNCTION FOR TURN
     myShipAttackAlien();
     if (alienShip.hull > 0) {
       alienAttackMyShip();
@@ -85,13 +75,12 @@ const rounds = (round) => {
         "background: #222; color: #ff0000"
       );
     }
-    //REPEAT ROUND IF ALIEN SHIP OR MYSHIP HAS HIT POINTS
+    //REPEAT TURN IF ALIEN OR PLAYER HULL>0
   } while (alienShip.hull > 0);
   console.log(
     `%c${alienShip.id} was destroyed!`,
     "background: #222; color: #00000ff"
   );
-
   //END GAME CONDITION
   if (round == randomRounds) {
     return console.log(
@@ -99,19 +88,21 @@ const rounds = (round) => {
       "background: #222; color: #00ff00"
     );
   }
-
-  //CONTINE OR RETREAT
+  //CONTINNUE OR RETREAT END OF ROUND PROMPT
   const promptVal = prompt(
-    `Do you want to continue enter (c) or any key to retreat?`
+    `Enter (c) to contue. Enter any key or cancel to retreat`
   );
-  if (promptVal.toLowerCase() == "c") {
+  if (promptVal == "c" || promptVal == "C") {
     round++;
     rounds(round);
   } else {
-    console.log("%cGame over!", "background: #222; color: #ff0000");
+    console.log(
+      "%cYou retreated, Game over!",
+      "background: #222; color: #ff0000"
+    );
   }
 };
 setTimeout(function () {
-  alert("Welcome, pless ok to start");
+  alert("Welcome, click 'ok' to start");
   rounds(roundCount);
 }, 2000);
